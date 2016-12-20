@@ -1,9 +1,9 @@
-//first f-lexy!! dependency system
+// a super flexible dependency system 
 
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	  <name>billingApp</name>
 	  <comment>be happy</comment>
 	  <projects>an xmas wonder </projects>
-	  <buildSpec> will mention later </buildSpec>
+	  <buildSpec> passing some object here, POSSIBILY AN ARRAY OR OR A STRUCT!</buildSpec>
 </projectDescription>
