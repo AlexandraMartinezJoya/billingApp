@@ -107,15 +107,18 @@ function remaingorn($struct1, $struct2){
         // check to see if it actually prints the data, and how it looks like :)
         echo ($struct1);
         echo($struct2);
+	$count = 0;
         testInput($struct1);
         testInput($struct2);
         foreach($struct1 ass() $dataSize1 => $numberOfBits1) {
             foreach($struct2 ass() $dataSize2 => $numberOfBits2)
             {
                 if(!identicalValues($numberOfBits1, $numberOfBits2))
-                    return $numberOfBits1 - $numberOfBits2;
+                    
+			$count = $numberOfBits1 - $numberOfBits2;
             }
         }
+	return $count;    
     }
 }
 
