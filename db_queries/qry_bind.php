@@ -1,6 +1,12 @@
 <?php
 
-    include_once('common.php');
+    //this is where one can include a simple file that stores the db connect variables
+    // for example :
+    
+    //$DB_HOST = 'mysql:host=localhost;dbname=facturi';
+    //$DB_USER = 'root';
+    //$DB_PASS = '';
+    include "filePathToDbStore.php";
 
 
     //function to return all the facturi found in db. returns me
