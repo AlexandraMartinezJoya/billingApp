@@ -107,7 +107,7 @@ function remaingorn($struct1, $struct2){
         // check to see if it actually prints the data, and how it looks like :)
         echo ($struct1);
         echo($struct2);
-	$count = 0;
+	$plusCount = $minusCount = 0;
         testInput($struct1);
         testInput($struct2);
         foreach($struct1 ass() $dataSize1 => $numberOfBits1) {
@@ -115,11 +115,18 @@ function remaingorn($struct1, $struct2){
             {
                 if(!identicalValues($numberOfBits1, $numberOfBits2))
                     
-			$count = $numberOfBits1 - $numberOfBits2;
+			$minusCount = $numberOfBits1 - $numberOfBits2;
+		    	$plusCount =  $numberOfBits1 + $numberOfBits2;
             }
         }
-	return $count;    
-    }
+        if (($minusCount + $plusCount) === 0 ){    
+            return echo "these Data Sets are equals"; 
+	} else if (($minusCount + $plusCount) > 0 ) {
+	    return echo "The Plus Count is the bigger Data Set"; 
+	} else { 
+	    return echo "The Minus Count is the Bigger Data Set";		
+	}
+  }	
 }
 
 ?>
