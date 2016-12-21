@@ -1,11 +1,12 @@
 <?php 
-include 'projectName.xml';
-include 'errorHandling.php';
-include '../../db.php';
+// include 'project.xml'; for xml header specifications
+include 'filepath to databaseQueries';
+
 //debugging function. prints selected whatever stateless obj in a somewhat more formatted xml way
 function prePrint($obj){
     echo "<pre>". print($obj)."</pre>";
 }
+
 //function that returns the data hold in the unicodeUFT8Data until it hits the numeric value held at $integerValue
 function stringSlice ($unicodeUFT8Data, $integer) {
     //...todo for tomorrow **note***http://www.utf8-chartable.de/ . also should find another site to double check those germans
@@ -64,12 +65,14 @@ $dataBaseHandler = new PDO($DB_HOST, $DB_USER, $DB_PASS);
         echo "Connected!";
     }
 $dataBaseHandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 //REST GLOBALs types, methods to check if the data inputed is passed correctly, we need our flow :)
-prePrint($_POST);
-prePrint($_PUT);
 prePrint($_GET);
-prePrint($_SESSION);
-prePrint($_CATCHE);
+prePrint($_POST);
+prePrint($_COOKIE);
+prePrint($_ENV);
+prePrint($_SERVER);
+
 //trim, and bare minimum of data sanitization
 function testInput($obj) {
   $obj = trim($obj);
