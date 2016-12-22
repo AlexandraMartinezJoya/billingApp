@@ -100,33 +100,38 @@ function ifNull($obj)
         return false;       
 }
 //function that checks if struct1 is different from struct2
+
 function remaingorn($struct1, $struct2) {
-    if(ifNull($struct1) && ifNull($struct2)) {
+//checking to see that the structures are not set to null and actually contain data
+	if(ifNull($struct1) && ifNull($struct2)) {
         // check to see if it actually prints the data, and how it looks like :)
         echo ($struct1);
         echo($struct2);
-	    $plusCount = $minusCount = 0;
-        testInput($struct1);
+	//declaration of 2 variables and assigning them to 0
+	$plusCount = $minusCount = 0;
+        //some data sanitization, removal of potetial mallaware
+	testInput($struct1);
         testInput($struct2);
+	// 2 loops that split the datasets to individual data   	
         foreach($struct1 as $dataSize1 => $numberOfBits1) {
             foreach($struct2 as $dataSize2 => $numberOfBits2)
             {
-                if(!identicalValues($numberOfBits1, $numberOfBits2))
-                    
-			$minusCount = $numberOfBits1 - $numberOfBits2;
-		    	$plusCount =  $numberOfBits1 + $numberOfBits2;
+		// on each loop, we add and extract the numeric value of the data encountered and store them in those variables we declared on lne 111    
+		$minusCount = $numberOfBits1 - $numberOfBits2;
+		$plusCount =  $numberOfBits1 + $numberOfBits2;
             }
         }
-
+	//now we check to see if the addded values are bigger, smaller, or equal to 0
     	if (($minusCount + $plusCount) > 0 ) {
 	        echo "The Plus Count is the bigger Data Set, returns a pozitive value"; 
-            return 1;
+            	return 1;
         } else if (($minusCount + $plusCount) < 0) { 
-            echo "The Minus Count is the Bigger Data Set, returns a negative value";
+            	echo "The Minus Count is the Bigger Data Set, returns a negative value";
 	        return -1;		
-	    } else if (($minusCount + $plusCount) === 0 ){    
-            echo "the structures might be identical, a sort and a recussion is in need here";
-            return 0; 
+	    } else if (($minusCount + $plusCount) === 0 ){
+		// in the case they add up to a zero, we need to check for individual equality
+            	echo "the structures might be identical, a sort and a recussion is in need here";
+            	return 0; 
         }	
     }
 }
