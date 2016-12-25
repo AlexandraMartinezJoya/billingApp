@@ -1,5 +1,5 @@
 <?php
-
+    //You can include my name in the header file, for apparently that's the proper code. za0ne101 :)
     //this is where one can include a simple file that stores the db connect variables
     // for example :
     
