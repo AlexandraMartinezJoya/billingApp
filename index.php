@@ -1,8 +1,9 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
 
   <head>
-      <!-- Also must include me if you use this index file, @za0ne101 -->
+<!--note(@everyone) now that the code of honor MUST be instaured, everyone copying this apparently my include me. -->
+
       <!-- Latest compiled and modified CSS -->
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="./font-awesome-4.6.3/css/font-awesome.min.css">
@@ -13,15 +14,18 @@
       <!-- Latest compiled JavaScript -->
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
+
 <?php
 include('common.php');
-
+    if(session_start()) {
     //creates a variable to save all billing data, now this is obviously wrongly located here, it needs an if  
     //if()
-        $bills = getAllFacturi();
+        $bills = getAllBills();
     //creates a variable to save page total
-        $total = 0;
+    $grandTotal  = 0;
 
+   // preprint($_SESSION);
+    }
 ?>
 <body>
 
@@ -29,7 +33,7 @@ include('common.php');
         <div class="row" align="center">
             <div class="col-xs-12">
             <!-- header2-row -->
-            <h2 class ="text-center">Situatia facturilor la data curenta</h2> <!-- page title -->
+            <h2 class ="text-center">All Bills View Page  </h2> <!-- page title -->
         </div>
 
         <div class="row"> <!-- add row -->
@@ -43,58 +47,59 @@ include('common.php');
             <table class="text-center table table-striped table-hover" >
                 <thead class="text-center"> <!-- Table head -->
                     <tr>
-                        <th class="text-center">Nr. Crt.</th>
-                        <th class="text-center">Serie / Nr</th>
-                        <th class="text-center">Data</th>
-                        <th class="text-center">Beneficiar</th>
+                        <th class="text-center">Number </th>
+                        <th class="text-center">Serial Number</th>
+                        <th class="text-center">Date</th>
+                        <th class="text-center">Emitent</th>
                         <th class="text-center">Total</th>
-                        <th class="text-center">Stare</th>
-                        <th class="text-center">Vizualizare</th>
-                        <th class="text-center">Editare</th>
+                        <th class="text-center">State</th>
+                        <th class="text-center">View</th>
+                        <th class="text-center">Edit</th>
                     </tr>
                 </thead>
 
                 <tbody> <!--table body -->
                 <?php
-                //declare and initalize variable total to array containing produse data from db
-                $produse = getAllProduse();
+                //declare and initalize variable total to array containing products data from db
+                $products = getAllProducts();
 
-                //calculates the produse total for each produs with a certain fact_id, used in total **php implementation**
-                function totalProdus($id_fact) {
-                    $total_local = 0;
-                    $produse = getAllProdus($id_fact);
-                    foreach($produse as $produs) {
-                        $total_local += $produs["cantitate"] * $produs["pret_unitar"];
-                    }
-                    return $total_local;
-                }
+                // calculates the products total for each produs with a certain id_fact which at this point we are not using, used in total **php implementation**
+                // function totalProducts($id_fact) {
+                //     $total_local = 0;
+                //     $products = getAllProductsByID($id_fact);
+                //     foreach($products as $produs) {
+                //         $total_local += $produs["cantitate"] * $produs["pret_unitar"];
+                //     }
+                //     return $total_local;
+                // }
 
-                // calculates the produse total for each produs with certain fact_id, but fetches data from a returned array calculated in sql  **sql fantom col implementation**
-                $total_factura_tg = select_total_per_fact();
-                $total_m = 0;
+                // calculates the products total for each produs with certain bill_id, but fetches data from a returned array calculated in sql  **sql fantom col implementation**
+                $totalBill = selectTotalPerBill();
+                $idNum = 0;
 
-                foreach($bills as $factura) {
-                    //gets the id number of the factura
-                    //preprint($factura);
-                    $fact_id = $factura['id'];
-                    //var to store total on each factura data using php version of the code
-                    $produse_total = 0;
+                foreach($bills as $bill) {
+                    //gets the id number of the bill
+                    //preprint($bill);
+                    $idNum +=1;
+                    $factId = $bill['id'];
+                    //var to store total on each bill data using php version of the code
+                    //$products_total = 0;
 
-                    //calculates the total per factura
-                    if($total_factura_tg[$fact_id]['tg']) {
-                        $total_f = round($total_factura_tg[$fact_id]['tg'],2);
-                        $total_m += round($total_factura_tg[$fact_id]['tg'],2);
+                    //calculates the total per bill
+                    if($totalBill[$factId]['tg']) {
+                        $singleRowTotalRoundedAt2 = round($totalBill[$factId]['tg'],2);
+                        $grandTotal += round($totalBill[$factId]['tg'],2);
 
                     ?>
                         <tr>
-                            <td class="text-center"><?php echo $fact_id + 1?></td>
-                            <td class="text-center"><?php echo $factura["serie"]?>/<?php echo $factura["nr"]?></td>
-                            <td class="text-center"><?php echo $factura["data_emiterii"]?></td>
-                            <td class="text-center"><?php echo $factura["benef_denumire"]?></td>
-                            <td class="text-center"><?php echo $total_f // total?></td>
-                            <td class="text-center"><?php echo $factura["stare"]==1?"Platit":"Neplatit"?></td>
-                            <td class="text-center"><a href= <?php echo "fact_view.php?idfact=".$factura["id"]?> class="btn btn-primary"><span class="fa fa-eye"></span> Vizualizeaza</a></td>
-                            <td class="text-center"><a href= <?php echo "fact_edit.php?idfact=".$factura["id"]?> class="btn btn-primary"><span class="fa fa-edit"></span> Editeaza</a></td>
+                            <td class="text-center"><?php echo $idNum?></td>
+                            <td class="text-center"><?php echo $bill["serie"]?>/<?php echo $bill["nr"]?></td>
+                            <td class="text-center"><?php echo $bill["data_emiterii"]?></td>
+                            <td class="text-center"><?php echo $bill["benef_denumire"]?></td>
+                            <td class="text-center"><?php echo $singleRowTotalRoundedAt2 // total?></td>
+                            <td class="text-center"><?php echo $bill["stare"]==1?"Platit":"Neplatit"?></td>
+                            <td class="text-center"><a href= <?php echo "factView.php?idfact=".$bill["id"]?> class="btn btn-primary"><span class="fa fa-eye"></span> View</a></td>
+                            <td class="text-center"><a href= <?php echo "factEdit.php?idfact=".$bill["id"]?> class="btn btn-primary"><span class="fa fa-edit"></span> Edit</a></td>
                         </tr>
                     <?php
                     }   
@@ -106,8 +111,8 @@ include('common.php');
                         <th/>
                         <th/>
                         <th/>
-                        <th class="text-center"> Total General </td>
-                        <th class="text-center"><?php echo  $total_m;?> </td>
+                        <th class="text-center"> Grand Total </td>
+                        <th class="text-center"><?php echo  $grandTotal;?> </td>
                     </tr>
                 </tfoot>
             </table>
@@ -117,4 +122,3 @@ include('common.php');
 </div>
 </body>
 </html>
-
