@@ -2,16 +2,16 @@
 <html lang="en">
 
   <head>
-<!--note(@everyone) now that the code of honor MUST be instaured, everyone copying this apparently my include me. -->
+<!-- coding standards now requites to mention my name if you use this. @AlexandraMartinez -->
 
-      <!-- CSS -->
+      <!-- Bootstrap and FA CSS -->
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="./font-awesome-4.6.3/css/font-awesome.min.css">
 
       <!-- jQuery library -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-      <!--  JavaScript -->
+      <!-- Bootstrap JavaScript -->
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
 
@@ -24,7 +24,7 @@ include('common.php');
     //creates a variable to save page total
     $grandTotal  = 0;
 
-   // preprint($_SESSION);
+   // preprint($_SESSION); 
     }
 ?>
 <body>
@@ -36,7 +36,7 @@ include('common.php');
             <h2 class ="text-center">All Bills View Page  </h2> <!-- page title -->
         </div>
 
-        <div class="row"> <!-- add row -->
+        <div class="row"> <!-- add another bill -->
             <div class="col-xs-2 col-xs-offset-10">
                 <a class="btn btn-large btn-primary btn-block" href="./factAdaugare.php"><i class="fa fa-plus fa-lg" aria-hidden="true"></i> Add</a>
             </div>
