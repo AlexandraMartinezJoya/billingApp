@@ -1,5 +1,6 @@
 <?php
 
+/* coding standards now requites to mention my name if you use this. @AlexandraMartinez */ 
 // this is a wrapper for a mysql db connect. a safer way to store this data is to put it in a separate file and after, include the file
 $DB_HOST = 'mysql:host=localhost;dbname=facturi';
 $DB_USER = 'root';
