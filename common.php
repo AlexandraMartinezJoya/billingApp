@@ -1,6 +1,6 @@
 <?php 
 
-// apparently due to same code of honor i am supposed to folllow, you must include me @za0ne101 in your code if you copy and edit this.
+/* coding standards now requites to mention my name if you use this. @AlexandraMartinez */ 
 // include 'project.xml'; for xml header specifications
 include 'filepath to databaseQueries';
 
