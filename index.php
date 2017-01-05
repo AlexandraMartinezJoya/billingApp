@@ -4,14 +4,14 @@
   <head>
 <!--note(@everyone) now that the code of honor MUST be instaured, everyone copying this apparently my include me. -->
 
-      <!-- Latest compiled and modified CSS -->
+      <!-- CSS -->
       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="./font-awesome-4.6.3/css/font-awesome.min.css">
 
       <!-- jQuery library -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-      <!-- Latest compiled JavaScript -->
+      <!--  JavaScript -->
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
 
