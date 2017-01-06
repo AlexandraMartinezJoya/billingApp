@@ -38,7 +38,7 @@ include('common.php');
 
         <div class="row"> <!-- add another bill -->
             <div class="col-xs-2 col-xs-offset-10">
-                <a class="btn btn-large btn-primary btn-block" href="./factAdaugare.php"><i class="fa fa-plus fa-lg" aria-hidden="true"></i> Add</a>
+                <a class="btn btn-large btn-primary btn-block" href="./billAdd.php"><i class="fa fa-plus fa-lg" aria-hidden="true"></i> Add</a>
             </div>
         </div>
 
