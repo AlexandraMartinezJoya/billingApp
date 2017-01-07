@@ -6,6 +6,10 @@ $DB_HOST = 'mysql:host=localhost;dbname=facturi';
 $DB_USER = 'root';
 $DB_PASS = '';
 
+  $DB_HOST = 'mysql:host=localhost;dbname=facturi';
+$DB_USER = 'root';
+$DB_PASS = '';
+
     //function to return all the bills found in db
     function getAllBills() {
         global $dataBaseHandler;
@@ -13,6 +17,25 @@ $DB_PASS = '';
         $stmt_f -> execute();
         $facturi = $stmt_f ->fetchAll();
         return $facturi;
+    }
+
+    // function that returns all the company data
+    function getAllCompanyData() {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler->prepare('SELECT * FROM company_data');
+        $stmt = execute();
+        $companyData = $stmt->fetchall();
+        return $companyData;
+    }
+
+    //function that returns the company data after an index or forgein key search
+    function getAllForgeinKeyCompanyData($forgeinKeyRegiter) {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler ->prepare('SELECT * FROM company_data WHERE id_register = :id_register');
+        $stmt ->bindParam(':id_register', $forgeinKeyRegiter);
+        $stmt->execute();
+        $foundData = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $foundData;
     }
 
     //function to return the factura data searched after the id of the item. returns an array
@@ -32,7 +55,7 @@ $DB_PASS = '';
     return $denum;
     }
 
-    // gets all products data from in db. this is not that optimal if the db is going to be really big. 
+    // gets all products data from in db. this is not that optimal if the db is going to be really big.
         function getAllProducts() {
         global $dataBaseHandler;
         $stmt = $dataBaseHandler->prepare('SELECT * FROM produs');
@@ -43,10 +66,10 @@ $DB_PASS = '';
 
 
     //gets data from produs table from db , returns an associtive array based on a forgein key select
-    function getAllProductsByForgeinKey($fkIDFact) {
+    function getAllProductsByID($idFact) {
         global $dataBaseHandler;
         $stmt_p = $dataBaseHandler->prepare('SELECT * from produs WHERE id_fact = :id_fact');
-        $stmt_p ->bindParam(':id_fact', $fkIDFact);
+        $stmt_p ->bindParam(':id_fact', $idFact);
         $stmt_p -> execute();
         $forgeinKeyProducts = $stmt_p ->fetchAll();
         return $forgeinKeyProducts;
@@ -69,7 +92,7 @@ $DB_PASS = '';
          $sql = "INSERT INTO facturi (benef_denumire, benef_cui, benef_adresa, benef_cont_bancar, data_emiterii, data_scadentei, serie, nr)
              VALUES (:benef_denum, :benef_cui, :benef_adresa, :benef_cont_bancar, :data_emiterii, :data_scadentei, :serie, :numar)";
          $stmt = $dataBaseHandler ->prepare($sql);
-         preprint($stmt);
+        // preprint($stmt);
          $stmt -> bindParam(':benef_denum', $denumire);
          $stmt -> bindParam(':benef_cui', $cui);
          $stmt -> bindParam(':benef_adresa', $adresa);
@@ -84,6 +107,33 @@ $DB_PASS = '';
 //         preprint($id);
          return $id;
      }
+
+
+
+     function insertCompanyData( $compName, $address, $billNumber, $billBankAccount, $VATNumber) {
+         global $dataBaseHandler;
+         $sql = "INSERT INTO company_data (company_name, company_address, bill_number, bill_bank_account, bill_vat_number) VALUES(:company_name, :company_address, :bill_number, :bill_bank_account, :bill_vat_number)";
+         $stmt = $dataBaseHandler ->prepare($sql);
+         $stmt -> bindParam(':compName', $compName);
+         $stmt -> bindParam(':compAddress', $address);
+         $stmt -> bindParam(':billNumber', $billNumber);
+         $stmt -> bindParam(':billSeriesId', $billBankBankAccount);
+         $stmt -> bindParam('VATNumber', $VATNumber);
+         $stmt -> execute();
+         $fk_id = getDBRelation($id);
+         $sql_two ="INSERT INTO company_data (id_register) VALUES (:$fk_id)";
+         $stmt =$dataBaseHandler -> prepare($sql_two);
+         $stmt ->execute();
+         $id = $dataBaseHandler -> lastInsertId($sql);
+        }
+
+
+        // function that retrieves
+        function getDBRelation($id) {
+            global $databaseHander;
+            $sql = "SELECT id_register FROM company_data WHERE id = $id";
+            return $sql;
+        }
 
         // Code sample by Stefancu
         //  function handle_produse_post() {
