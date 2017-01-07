@@ -14,6 +14,25 @@
       <!-- Bootstrap JavaScript -->
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
-<body>
+  <?php
+      include_once('common.php');
+      include_once('./db_queries/qryBind.php');
+  ?>
+  <body>
+    <div class="container main-container"> <!-- main div container -->
 
-</body>
+      <div class="row col-xs-12 text-center" align="center"> <!-- header row -->
+         <h2>Add a bill</h2>  <!-- page title -->
+      </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+ <form id="mainFormAdd" class="addForm form-group" name="mainFormName" method="post" action='javascript:alert( "success!" );'><!-- add form -->
+ <p> <!-- Error notification span -->
+     <span class="error">* required field</span>
+</p> 
+ <div class="row">
+ <div class = "row" align="center">
+  </body>
