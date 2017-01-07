@@ -19,20 +19,18 @@
       include_once('./db_queries/qryBind.php');
   ?>
   <body>
-    <div class="container main-container"> <!-- main div container -->
+<div class="container main-container"> <!-- main div container -->
 
-      <div class="row col-xs-12 text-center" align="center"> <!-- header row -->
-         <h2>Add a bill</h2>  <!-- page title -->
-      </div>
-</div>
+    <div class="row ">
+        <div class= "col-xs-12 text-center" align="center"> <!-- header row -->
+            <h2>Add a bill</h2>  <!-- page title -->
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-xs-12">
-
- <form id="mainFormAdd" class="addForm form-group" name="mainFormName" method="post" action='javascript:alert( "success!" );'><!-- add form -->
- <p> <!-- Error notification span -->
-     <span class="error">* required field</span>
-</p> 
- <div class="row">
- <div class = "row" align="center">
+    <div class="row">
+      <div class="col-xs-12">
+         <form id="mainFormAdd" class="addForm form-group" name="mainFormName" method="post" action='javascript:alert( "success!" );'><!-- add form -->
+         <p> <!-- Error notification span --> <span class="error">* required field</span>
+         </p>
+   
   </body>
