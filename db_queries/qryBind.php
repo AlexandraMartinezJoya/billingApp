@@ -1,14 +1,13 @@
 <?php
+ /* coding standards now requites to mention my name if you use this. @AlexandraMartinez */
 
-/* coding standards now requites to mention my name if you use this. @AlexandraMartinez */ 
-// this is a wrapper for a mysql db connect. a safer way to store this data is to put it in a separate file and after, include the file
 $DB_HOST = 'mysql:host=localhost;dbname=facturi';
 $DB_USER = 'root';
 $DB_PASS = '';
 
-  $DB_HOST = 'mysql:host=localhost;dbname=facturi';
-$DB_USER = 'root';
-$DB_PASS = '';
+function prePrinted($obj){
+    print "<pre>". print_r($obj, true) ."</pre>";
+}
 
     //function to return all the bills found in db
     function getAllBills() {
@@ -75,6 +74,32 @@ $DB_PASS = '';
         return $forgeinKeyProducts;
     }
 
+    // @returns the last company inserted id
+    function getLastCompanyId() {
+        global $dataBaseHandler;
+        $preparedStmt = $dataBaseHandler->prepare('SELECT id from company_data');
+        $preparedStmt -> execute();
+        $idList = $preparedStmt->fetchAll();
+        preprinted ( $idList);
+        $lastInsertId = 0;
+        for ($i=0; $i < count($idList) - 1; $i++) {
+            $lastInsertId = $i;
+        }
+        return $lastInsertId;
+    }
+
+    function getComanyVatNumber($idCompany) {
+        $idCompany = getLastCompanyId();
+        global $dataBaseHandler;
+        $preparedStmt = $dataBaseHandler ->prepare("SELECT bill_vat_number from company_data where id = $idComapny");
+        $preparedStmt ->execute();
+        $vatNumber = $preparedStmt -> fetch(PDO::FETCH_ASSOC);
+        preprinted($idList);
+        return $vatNumber;
+    }
+
+
+
     // function insert_benef_name_data($denumire) {
     //     global $dataBaseHandler;
     //     preprint($denumire);
@@ -107,7 +132,6 @@ $DB_PASS = '';
 //         preprint($id);
          return $id;
      }
-
 
 
      function insertCompanyData( $compName, $address, $billNumber, $billBankAccount, $VATNumber) {
