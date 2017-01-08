@@ -1,141 +1,263 @@
-<?php 
+<?php
+ /* coding standards now requites to mention my name if you use this. @AlexandraMartinez */
 
-/* coding standards now requites to mention my name if you use this. @AlexandraMartinez */ 
-// include 'project.xml'; for xml header specifications
-include 'filepath to databaseQueries';
+$DB_HOST = 'mysql:host=localhost;dbname=facturi';
+$DB_USER = 'root';
+$DB_PASS = '';
 
-//debugging function. prints selected whatever stateless obj in a somewhat more formatted xml way
-function prePrint($obj){
-    echo "<pre>". print($obj)."</pre>";
+function prePrinted($obj){
+    print "<pre>". print_r($obj, true) ."</pre>";
 }
 
-//function that returns the data hold in the unicodeUFT8Data until it hits the numeric value held at $integerValue
-function stringSlice ($unicodeUFT8Data, $integer) {
-    //...todo for tomorrow **note***http://www.utf8-chartable.de/ . also should find another site to double check those germans
-}
-
-function ifXml($obj){
-    if(isset($obj)){
-        $regularExpression = "<?xml";
-        $newObj = stringSlice($obj, 4);
-        if($regularExpression == $newObj)
-        echo typeof($regularExpression == $newObj);
-        return true;
+    //function to return all the bills found in db
+    function getAllBills() {
+        global $dataBaseHandler;
+        $stmt_f = $dataBaseHandler->prepare('SELECT * FROM facturi');
+        $stmt_f -> execute();
+        $facturi = $stmt_f ->fetchAll();
+        return $facturi;
     }
-    else {
-        prePrint($obj);
-        return false;
+
+    // function that returns all the company data
+    function getAllCompanyData() {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler->prepare('SELECT * FROM company_data');
+        $stmt = execute();
+        $companyData = $stmt->fetchall();
+        return $companyData;
     }
-}
 
-function ifDependencyisXML($obj){
-    if(null !== ifXml($obj)){
-        ifXml($obj);
-        testInput($obj);
-        return true;
+    //function that returns the company data after an index or forgein key search
+    function getAllForgeinKeyCompanyData($forgeinKeyRegiter) {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler ->prepare('SELECT * FROM company_data WHERE id_register = :id_register');
+        $stmt ->bindParam(':id_register', $forgeinKeyRegiter);
+        $stmt->execute();
+        $foundData = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $foundData;
     }
- else {
-    echo "not xml"; // perhaps perform another check for other types of builds, like json encoding;
-    prePrint ($obj);
-    testInput($obj);
-    return false;
+
+    //function to return the factura data searched after the id of the item. returns an array
+    function getBillData($idBill){
+        global $dataBaseHandler;
+        $stmt_idf = $dataBaseHandler->prepare('SELECT * from facturi WHERE id = :id');
+        $stmt_idf->bindParam(':id', $idBill);
+        $stmt_idf -> execute();
+        $facturi_gasite = $stmt_idf ->fetch(PDO::FETCH_ASSOC);
+        return $facturi_gasite;
     }
-}
-//function to check the file version corresponds with the project dependency, if dependency is xml
-function fileVersion($obj) {
-	echo "<?xml version=".print($obj) ."encoding='UTF-8'?>";
-}
-//function to change the name of the project dependency,if dependency is xml
-function insertNameTag($obj) {
-	echo "<name>".print($obj)."</name>";
-}
-//function to change the file version of the project dependency is xml
-function insertCommentTag($obj) {
-	echo "<comment>".print($obj)."</comment>";
-}
-//function to chage the project tag of the project dependency , if dependency is xml
-function insertProjectsTag($obj) {
-	echo "<projects>".print($obj)."</projects>";
-}
-function insertBuildSpecTag($obj) {
-	echo "<buildSpec>". print($obj). "</buildSpec>";
-}
-// create a db handler with PDO lib. note(alexa) please look into depth here. Much might come to a 2nd db
-global $dataBaseHandler;
-$dataBaseHandler = new PDO($DB_HOST, $DB_USER, $DB_PASS);
-    if($dataBaseHandler) {
-        echo "Connected!";
+
+    // function to select a field based on table col name and id, returns the aassociated data
+    function getTableBillData($idBill, $tableColName) {
+    $data = getFactura($idBill);
+    $denum = $data[$tableColName];
+    return $denum;
     }
-$dataBaseHandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-//REST GLOBALs types, methods to check if the data inputed is passed correctly, we need our flow :)
-prePrint($_GET);
-prePrint($_POST);
-prePrint($_COOKIE);
-prePrint($_ENV);
-prePrint($_SERVER);
-
-//trim, and bare minimum of data sanitization
-function testInput($obj) {
-  $obj = trim($obj);
-  $obj = stripslashes($obj);
-  $obj = htmlspecialchars($obj);
-  return $obj;
-}
+    // gets all products data from in db. this is not that optimal if the db is going to be really big.
+        function getAllProducts() {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler->prepare('SELECT * FROM produs');
+        $stmt -> execute();
+        $products = $stmt -> fetchAll();
+        return $products;
+    }
 
 
-//function that sorts 2 arrays and checks if they are equal
-function identicalValues( $dataset1 , $dataset2 )
-{
-    sort($dataset1);
-    sort($dataset2);
-    return $dataset1 == $dataset2;
-}
+    //gets data from produs table from db , returns an associtive array based on a forgein key select
+    function getAllProductsByID($idFact) {
+        global $dataBaseHandler;
+        $stmt_p = $dataBaseHandler->prepare('SELECT * from produs WHERE id_fact = :id_fact');
+        $stmt_p ->bindParam(':id_fact', $idFact);
+        $stmt_p -> execute();
+        $forgeinKeyProducts = $stmt_p ->fetchAll();
+        return $forgeinKeyProducts;
+    }
 
-
-
-function ifNull($obj) 
-{
-    if ($obj == NULL) 
-        return true;
-    else 
-        return false;       
-}
-//function that checks if struct1 is different from struct2
-
-function remaingorn($struct1, $struct2) {
-//checking to see that the structures are not set to null and actually contain data
-	if(ifNull($struct1) && ifNull($struct2)) {
-        // check to see if it actually prints the data, and how it looks like :)
-        echo ($struct1);
-        echo($struct2);
-	//declaration of 2 variables and assigning them to 0
-	$plusCount = $minusCount = 0;
-        //some data sanitization, removal of potetial mallaware
-	testInput($struct1);
-        testInput($struct2);
-	// 2 loops that split the datasets to individual data   	
-        foreach($struct1 as $dataSize1 => $numberOfBits1) {
-            foreach($struct2 as $dataSize2 => $numberOfBits2)
-            {
-		// on each loop, we add and extract the numeric value of the data encountered and store them in those variables we declared on lne 111    
-		$minusCount = $numberOfBits1 - $numberOfBits2;
-		$plusCount =  $numberOfBits1 + $numberOfBits2;
-            }
+    // @returns the last company inserted id
+    function getLastCompanyId() {
+        global $dataBaseHandler;
+        $preparedStmt = $dataBaseHandler->prepare('SELECT id from company_data');
+        $preparedStmt -> execute();
+        $idList = $preparedStmt->fetchAll();
+        preprinted ( $idList);
+        $lastInsertId = 0;
+        for ($i=0; $i < count($idList) - 1; $i++) {
+            $lastInsertId = $i;
         }
-	//now we check to see if the addded values are bigger, smaller, or equal to 0
-    	if (($minusCount + $plusCount) > 0 ) {
-	        echo "The Plus Count is the bigger Data Set, returns a pozitive value"; 
-            	return 1;
-        } else if (($minusCount + $plusCount) < 0) { 
-            	echo "The Minus Count is the Bigger Data Set, returns a negative value";
-	        return -1;		
-	    } else if (($minusCount + $plusCount) === 0 ){
-		// in the case they add up to a zero, we need to check for individual equality
-            	echo "the structures might be identical, a sort and a recussion is in need here";
-            	return 0; 
-        }	
+        return $lastInsertId;
     }
-}
+
+    function getComanyVatNumber($idCompany) {
+        $idCompany = getLastCompanyId();
+        global $dataBaseHandler;
+        $preparedStmt = $dataBaseHandler ->prepare("SELECT bill_vat_number from company_data where id = $idComapny");
+        $preparedStmt ->execute();
+        $vatNumber = $preparedStmt -> fetch(PDO::FETCH_ASSOC);
+        preprinted($idList);
+        return $vatNumber;
+    }
+
+
+
+    // function insert_benef_name_data($denumire) {
+    //     global $dataBaseHandler;
+    //     preprint($denumire);
+    //     $sql = "INSERT INTO facturi (benef_denumire) VALUES (:benef_denum)";
+    //     $stmt = $dataBaseHandler ->prepare($sql);
+    //     $stmt -> bindParam(':benef_denum', $denumire);
+    //     $stmt -> execute();
+    //     echo "done";
+    // }
+
+
+    // inserts fact data to the db , takes in arguments as variables for each field
+    function insertBeneficiaryBillData($denumire, $cui, $adresa, $cont_bancar, $data_emiterii, $data_scadenta, $serie, $numar) {
+         global $dataBaseHandler;
+         $sql = "INSERT INTO facturi (benef_denumire, benef_cui, benef_adresa, benef_cont_bancar, data_emiterii, data_scadentei, serie, nr)
+             VALUES (:benef_denum, :benef_cui, :benef_adresa, :benef_cont_bancar, :data_emiterii, :data_scadentei, :serie, :numar)";
+         $stmt = $dataBaseHandler ->prepare($sql);
+        // preprint($stmt);
+         $stmt -> bindParam(':benef_denum', $denumire);
+         $stmt -> bindParam(':benef_cui', $cui);
+         $stmt -> bindParam(':benef_adresa', $adresa);
+         $stmt -> bindParam(':benef_cont_bancar', $cont_bancar);
+         $stmt -> bindParam(':data_emiterii', $data_emiterii);
+         $stmt -> bindParam(':data_scadentei', $data_scadenta);
+         $stmt -> bindParam(':serie', $serie);
+         $stmt -> bindParam(':numar', $numar);
+         $stmt -> execute();
+//         echo  'records inserted successfully'."<br>";
+         $id = $dataBaseHandler->lastInsertId($sql);
+//         preprint($id);
+         return $id;
+     }
+
+
+     function insertCompanyData( $compName, $address, $billNumber, $billBankAccount, $VATNumber) {
+         global $dataBaseHandler;
+         $sql = "INSERT INTO company_data (company_name, company_address, bill_number, bill_bank_account, bill_vat_number) VALUES(:company_name, :company_address, :bill_number, :bill_bank_account, :bill_vat_number)";
+         $stmt = $dataBaseHandler ->prepare($sql);
+         $stmt -> bindParam(':compName', $compName);
+         $stmt -> bindParam(':compAddress', $address);
+         $stmt -> bindParam(':billNumber', $billNumber);
+         $stmt -> bindParam(':billSeriesId', $billBankBankAccount);
+         $stmt -> bindParam('VATNumber', $VATNumber);
+         $stmt -> execute();
+         $fk_id = getDBRelation($id);
+         $sql_two ="INSERT INTO company_data (id_register) VALUES (:$fk_id)";
+         $stmt =$dataBaseHandler -> prepare($sql_two);
+         $stmt ->execute();
+         $id = $dataBaseHandler -> lastInsertId($sql);
+        }
+
+
+        // function that retrieves
+        function getDBRelation($id) {
+            global $databaseHander;
+            $sql = "SELECT id_register FROM company_data WHERE id = $id";
+            return $sql;
+        }
+
+        // Code sample by Stefancu
+        //  function handle_produse_post() {
+         //
+        //      $produse = filter_input('POST', 'produse', );
+         //
+        //      foreach ($_POST['produse'] as $produs) {
+        //          insert_prod_data($produs['prod_denumire'], $produs['um'], produs['pret_unitar'], produs[q]);
+         //
+        //          foreach ($array as $keyP => $valuep) {
+        //              # code...
+        //          }
+        //          # code...
+        //      }
+        //  }
+
+
+    // insert prepared statement for data in produs. takes post data as a matrix and sends it to the forgein key relation
+    function insertProductData($prod_array, $fact_id) {
+            foreach ($prod_array as $produs) {
+                insert_row_data($produs, $fact_id);
+            }
+//            echo "Insert completed for all rows";
+    }
+
+
+    // insets table data in produs table, 1 row. constraint is that you need the row data stored as an array, and the forgein key id of the fact related to it
+    function insertProductRowData($row_Array, $fk_id) {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler ->prepare('INSERT INTO produs (denumire, unit_masura, cantitate, pret_unitar, id_fact) VALUES(:prod_denum, :prod_um, :prod_pu, :prod_q, :id_fact)');
+        $stmt -> bindParam(':id_fact', $fk_id);
+        $stmt -> bindParam(':prod_denum', $row_Array["prod_denum"]);
+        $stmt -> bindParam(':prod_um', $row_Array["prod_um"]);
+        $stmt -> bindParam(':prod_pu', $row_Array["prod_pu"]);
+        $stmt -> bindParam(':prod_q', $row_Array["prod_q"]);
+        $stmt -> execute();
+//        echo "<br>Insert completed for current row";
+    }
+
+
+    // updates the data in factura table, constraint is that the table data is stored in variables
+    function updateBillData($benefDenumire, $benefCui, $benefContBancar, $benefAdresa, $benefDataEmiterii, $benefDataScadenta, $factSerie, $factNr, $id_fact) {
+        //code here... repeating quite a bit, you could reduce the code significantly by applying the param binding in a array
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler ->prepare('UPDATE facturi  SET benef_denumire = :benef_denumire, benef_cui = :benef_cui, benef_cont_bancar = :benef_cont_bancar,
+                                                    benef_adresa = :benef_adresa, data_emiterii = :data_emiterii, data_scadentei = :data_scadentei,
+                                                    serie = :serie, nr = :nr
+                                                WHERE id = :id');
+        $stmt -> bindParam(':id', $id_fact);
+        $stmt -> bindParam(':benef_denumire', $benefDenumire);
+        $stmt -> bindParam(':benef_cui', $benefCui);
+        $stmt -> bindParam(':benef_cont_bancar', $benefContBancar);
+        $stmt -> bindParam(':benef_adresa', $benefAdresa);
+        $stmt -> bindParam(':data_scadentei', $benefDataScadenta);
+        $stmt -> bindParam(':data_emiterii', $benefDataEmiterii);
+        $stmt -> bindParam(':serie', $factSerie);
+        $stmt -> bindParam(':nr', $factNr);
+        $stmt -> execute();
+        echo $stmt->rowCount() . " records UPDATED successfully";
+    }
+
+
+    // updates data in produs table , with a forgein key match constraint
+    function updateProductData($produse_array){
+        foreach ($produse_array as $produs) {
+            update_row_data($produs);
+        }
+    }
+
+        function updateRowData($produs_array){
+            global $dataBaseHandler;
+            $stmt = $dataBaseHandler -> prepare('UPDATE produs SET denumire = :prod_denum, unit_masura  = :prod_um, cantitate = :prod_q, pret_unitar = :prod_pu
+                                        WHERE id = :id');
+            $stmt -> bindParam(':id', $produs_array["id"]);
+            $stmt -> bindParam(':prod_denum', $produs_array["prod_denum"]);
+            $stmt -> bindParam(':prod_um', $produs_array["prod_um"]);
+            $stmt -> bindParam(':prod_pu', $produs_array["prod_pu"]);
+            $stmt -> bindParam(':prod_q', $produs_array["prod_q"]);
+            $stmt ->execute();
+//            echo "records UPDATED";
+            }
+
+    // Selects data from db tables to return the multiplication of two fields, using a forgein key id.
+    function selectTotalPerBill() {
+        //code here..
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler -> prepare('SELECT p.id_fact, SUM( p.cantitate * p.pret_unitar) AS tg FROM produs p, facturi f WHERE p.id_fact = f.id GROUP BY f.id;');
+        $stmt ->execute();
+        $total_general = $stmt-> fetchall();
+        return $total_general;
+        //preprint($total_general);
+    }
+
+    //Deletes data from db table name produs , on id select
+    function deleteProductData($prod_id, $prod_array) {
+        global $dataBaseHandler;
+        $stmt = $dataBaseHandler -> prepare("DELETE FROM produs WHERE id =:id");
+        $stmt -> bindParam(':id', $prod_id);
+        $stmt -> execute();
+//        echo "</br>records deleted.</br>";
+    }
 
 ?>
