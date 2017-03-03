@@ -4,6 +4,6 @@
 <projectDescription>
 	<name>billingApp</name>
 	<comment>be happy</comment>
-	<projects>an xmas wonder </projects>
+	<projects>a xmas wonder </projects>
 	<buildSpec> can pass an object, an array, or even a struct here </buildSpec>
 </projectDescription>
