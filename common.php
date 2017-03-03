@@ -31,7 +31,7 @@ function prePrinted($obj){
     function getAllForgeinKeyCompanyData($forgeinKeyRegiter) {
         global $dataBaseHandler;
         $stmt = $dataBaseHandler ->prepare('SELECT * FROM company_data WHERE id_register = :id_register');
-        $stmt ->bindParam(':id_register', $forgeinKeyRegiter);
+        $stmt ->bindParam(':id_register', $forgeinKeyRegister);
         $stmt->execute();
         $foundData = $stmt->fetch(PDO::FETCH_ASSOC);
         return $foundData;
@@ -50,8 +50,8 @@ function prePrinted($obj){
     // function to select a field based on table col name and id, returns the aassociated data
     function getTableBillData($idBill, $tableColName) {
     $data = getFactura($idBill);
-    $denum = $data[$tableColName];
-    return $denum;
+    $name = $data[$tableColName];
+    return $name;
     }
 
     // gets all products data from in db. this is not that optimal if the db is going to be really big.
