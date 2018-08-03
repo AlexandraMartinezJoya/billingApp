@@ -1,1 +1,1 @@
-Basically some very basic php database queries. I still need to clean and refactor this a little bit. Note (Cristi!!) 
+Basically some very basic php database queries. I still need to clean and refactor this a little bit. 
